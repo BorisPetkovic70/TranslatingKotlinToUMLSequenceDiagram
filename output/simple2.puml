@@ -1,0 +1,21 @@
+@startuml
+!theme plain
+autonumber
+
+actor User as U
+participant "calc:Calculator" as O0
+participant "math:MathOperations" as O1
+
+U -> O0 : <<create>> Calculator()
+
+U -> O1 : <<create>> MathOperations(calc)
+
+U -> O1 : calculateSum(10,20)
+activate O1
+    O1 -> O0 : add(a,b)
+    activate O0
+    O0 --> O1 : addResult
+    deactivate O0
+O1 --> U : addResult
+deactivate O1
+@enduml

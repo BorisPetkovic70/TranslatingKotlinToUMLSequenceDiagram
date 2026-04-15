@@ -1,0 +1,41 @@
+@startuml
+!theme plain
+autonumber
+
+actor User as U
+participant "pump:WaterPump" as O0
+participant "controller:PumpController" as O1
+participant "gardener:AutomaticGardener" as O2
+
+U -> O0 : <<create>> WaterPump()
+
+U -> O1 : <<create>> PumpController(pump)
+
+U -> O2 : <<create>> AutomaticGardener(controller)
+
+loop while (day<=3)
+    U -> O2 : monitorSoil(day)
+    activate O2
+        alt currentDay==2
+            O2 -> O1 : startIrrigation(50)
+            activate O1
+                O1 -> O0 : powerOn(power)
+                activate O0
+                O0 --> O1 : powerOnResult
+                deactivate O0
+            O1 --> O2 : powerOnResult
+            deactivate O1
+        else
+            O2 -> O1 : stopIrrigation()
+            activate O1
+                O1 -> O0 : powerOff()
+                activate O0
+                O0 --> O1 : powerOffResult
+                deactivate O0
+            O1 --> O2 : powerOffResult
+            deactivate O1
+        end
+    O2 --> U : 
+    deactivate O2
+end
+@enduml

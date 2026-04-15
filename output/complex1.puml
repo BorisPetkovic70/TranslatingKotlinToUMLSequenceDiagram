@@ -1,0 +1,55 @@
+@startuml
+!theme plain
+autonumber
+
+actor User as U
+participant "heater:Heater" as O0
+participant "thermostat:Thermostat" as O1
+participant "room:Room" as O2
+
+U -> O0 : <<create>> Heater()
+
+U -> O1 : <<create>> Thermostat(heater)
+
+U -> O2 : <<create>> Room(thermostat,18)
+
+loop for (temp in temperatures)
+    U -> O2 : checkTemperature()
+    activate O2
+        alt currentTemp<20
+            O2 -> O1 : setHeating(true)
+            activate O1
+                alt enable
+                    O1 -> O0 : turnOn()
+                    activate O0
+                    O0 --> O1
+                    deactivate O0
+                else
+                    O1 -> O0 : turnOff()
+                    activate O0
+                    O0 --> O1
+                    deactivate O0
+                end
+            O1 --> O2 : 
+            deactivate O1
+        else
+            O2 -> O1 : setCooling(true)
+            activate O1
+                alt enable
+                    O1 -> O0 : startCooling()
+                    activate O0
+                    O0 --> O1
+                    deactivate O0
+                else
+                    O1 -> O0 : stopCooling()
+                    activate O0
+                    O0 --> O1
+                    deactivate O0
+                end
+            O1 --> O2 : 
+            deactivate O1
+        end
+    O2 --> U : 
+    deactivate O2
+end
+@enduml
