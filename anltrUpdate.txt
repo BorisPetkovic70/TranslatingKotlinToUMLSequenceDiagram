@@ -1,0 +1,1 @@
+& "C:\Program Files\Eclipse Adoptium\jdk-21.0.1.12-hotspot\bin\java.exe" -jar antlr-4.13.1-complete.jar -Dlanguage=Python3 -visitor -listener -o src/gen grammars/KotlinLexer.g4 grammars/KotlinParser.g4
